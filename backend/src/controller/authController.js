@@ -102,3 +102,21 @@ try {
 }
 
 }
+
+export const signOut = async(req, res) => {
+    try {
+        // lấy refresh token từ cookie
+        const token = req.cookie?.refreshToken;
+
+        //xóa refresh token trong session
+        if (token) {
+            await Session.deleteOne({refreshToken: token})    
+        //xóa cookie
+            res.clearCookie("refreshToken")
+        }
+        return res.sendStatus(204);
+    } catch (error) {
+    console.error('Lỗi khi gọi signIp: ', error)
+    return res.status(500).json({message: "Lỗi hệ thống"})
+    }
+}
