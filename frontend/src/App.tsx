@@ -1,25 +1,36 @@
-import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
+import { Toaster } from "sonner";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 import SignInPage from "./pages/SignIn";
 import SignUpPage from "./pages/SignUp";
 import ChatAppPage from "./pages/ChatApp";
-import {Toaster} from 'sonner'
-function App() {
 
+function App() {
   return (
     <>
-    <Toaster richColors/>
-    <BrowserRouter>
-      <Routes>
-        {/* public route */}
-        <Route path="/signin" element={<SignInPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
+      <Toaster richColors />
+      <BrowserRouter>
+        <Routes>
+          {/* public routes */}
+          <Route
+            path="/signin"
+            element={<SignInPage />}
+          />
+          <Route
+            path="/signup"
+            element={<SignUpPage />}
+          />
 
-        {/* protected route */}
-        <Route path="/" element={<ChatAppPage />} />
-      </Routes>
-    </BrowserRouter></>
-    
+          {/* protectect routes */}
+          <Route element={<ProtectedRoute />}>
+            <Route
+              path="/"
+              element={<ChatAppPage />}
+            />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </>
   );
 }
 
