@@ -16,7 +16,7 @@ router.post("/requests/:requestId/accept", acceptFriendRequest)
 router.post("/requests/:requestId/decline", declineFriendRequest)
 
 router.get("/", getAllFriends)
-router.get("/request", getFriendRequests)
+router.get("/requests", getFriendRequests)
 
 
 export default router;
