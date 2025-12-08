@@ -1,6 +1,5 @@
 import { useAuthStore } from '@/stores/useAuthStore';
 import axios from 'axios';
-import { config } from 'zod';
 
 const api = axios.create({
     baseURL: 
@@ -19,7 +18,7 @@ api.interceptors.request.use((config) => {
     return config;
 })
 //tự động gọi refresh api khi access token hết hạn
-api.interceptors.response.use((res), async (error) => {
+api.interceptors.response.use((res) => res, async (error) => {
     const originalRequest = error.config;
 
     //những api không cần check
