@@ -1,4 +1,4 @@
-// import Conversation from "../models/Conversation";
+// import Conversation from "../models/Conversation.js";
 import Friend from '../models/Friend.js';
 
 
@@ -29,7 +29,7 @@ export const checkFriendship = async (req, res, next) => {
         }
     
         //todo: chat nhóm
-        const isFriend = await Friend.findOne({userA, userB});
+        return next();
     } catch (error) {
         console.error("Lỗi xảy ra khi check friendship", error)
         return res.status(500).json({message})
