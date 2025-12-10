@@ -105,4 +105,31 @@ export const getConversation = async(req, res) => {
         return res.status(500).json({message: "Lỗi hệ thống"})
     }
 }
-export const getMessages = async(req, res) => {}
+export const getMessages = async(req, res) => {
+    try {
+        const {conversationId} = req.params;
+        const {limit = 50, cursor}  = req.query;
+
+        const query = {conversationId}
+        if (cursor) {
+            query.createdAt = {$lt: new Date(cursor)}
+        }
+
+        let messages = await Message.find(query)
+        .sort({createdAt: -1})
+        .limit(Number(limit) + 1)
+
+        let nextCursor = null;
+        if (messages.length > Number(limit)) {
+            const nextMessage = messages[messages.length - 1]
+            nextCursor = nextMessage.createdAt.toISOString();
+            messages.pop();
+        }
+
+        messages = messages.reverse();
+        return res.status(200).json({messages, nextCursor})
+    } catch (error) {
+        console.error("Lỗi xảy ra khi lấy messages", error)
+        return res.status(500).json({message: "Lỗi hệ thống"})
+    }
+}
