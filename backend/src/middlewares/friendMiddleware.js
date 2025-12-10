@@ -29,7 +29,20 @@ export const checkFriendship = async (req, res, next) => {
         }
     
         //todo: chat nhóm
-        return next();
+        
+        const friendChecks = memberIds.map(async (memberId) => {
+          const [userA, userB] = pair(me, memberId)
+          const friend = await Friend.findOne({ userA, userB })
+          return friend ? null : memberId;
+        })
+
+        const results = await Promise.all(friendChecks);
+        const notFriend = results.filter(Boolean)
+
+        if (notFriend.length > 0) {
+          return res.status(403).json({message: "Bạn chỉ có thể thêm bạn bè vào nhóm", notFriend})
+        }
+        next();
     } catch (error) {
         console.error("Lỗi xảy ra khi check friendship", error)
         return res.status(500).json({message})
